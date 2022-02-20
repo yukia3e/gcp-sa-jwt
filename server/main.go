@@ -17,12 +17,16 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	aud := os.Getenv("AUD")
 	serviceAccount := os.Getenv("SERVICE_ACCOUNT_EMAIL")
 
 	var jwt string
 	flag.StringVar(&jwt, "j", "", "jwt")
 	flag.Parse()
 
-	fmt.Println(verifier.Verify(jwt, aud, serviceAccount))
+	token, err := verifier.Verify(jwt, serviceAccount)
+	if err != nil {
+		fmt.Errorf("Error: %w", err.Error())
+	} else {
+		fmt.Println("Success: %+v", token)
+	}
 }
